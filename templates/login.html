@@ -1,15 +1,156 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+	<meta charset="UTF-8">
+	<title>Sign Up</title>
+
+	<style>
+		body {
+			font-family: sans-serif;
+			background: #f7f7fa;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			margin: 0;
+		}
+
+		.container {
+			background: #fff;
+			width: 480px;
+			padding: 48px;
+			border-radius: 14px;
+			box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+		}
+
+		h1 {
+			font-size: 32px;
+			margin-bottom: 4px;
+		}
+
+		.sub {
+			color: #888;
+			font-size: 15px;
+			margin-bottom: 32px;
+		}
+
+		label {
+			font-size: 15px;
+			font-weight: 600;
+		}
+
+		input {
+			width: 100%;
+			padding: 14px;
+			border-radius: 10px;
+			border: 1px solid #dcdcdc;
+			font-size: 15px;
+			margin-top: 6px;
+			margin-bottom: 24px;
+			box-sizing: border-box;
+		}
+
+		.term {
+			font-size: 14px;
+			display: flex;
+			align-items: center;
+			margin-bottom: 24px;
+		}
+
+		.term input {
+			width: auto;
+			margin-right: 8px;
+		}
+
+		.or {
+			display: flex;
+			align-items: center;
+			margin: 32px 0;
+			color: #999;
+			font-size: 13px;
+		}
+
+		.or::before,
+		.or::after {
+			content: "";
+			flex: 1;
+			border-bottom: 1px solid #e6e6e6;
+			margin: 0 12px;
+		}
+
+		.social-wrap {
+			display: flex;
+			gap: 12px;
+			margin-bottom: 24px;
+		}
+
+		.btn-social {
+			flex: 1;
+			padding: 12px;
+			border-radius: 10px;
+			border: 1px solid #ddd;
+			background: #fff;
+			font-size: 14px;
+			cursor: pointer;
+		}
+
+		.btn-signup {
+			width: 100%;
+			background: #2e64ff;
+			padding: 15px;
+			border-radius: 10px;
+			color: #fff;
+			font-size: 15px;
+			border: none;
+			cursor: pointer;
+			margin-top: 6px;
+		}
+
+		.bottom {
+			text-align: center;
+			margin-top: 24px;
+			font-size: 14px;
+			color: #666;
+		}
+
+		.bottom a {
+			color: #2e64ff;
+			text-decoration: none;
+		}
+	</style>
 </head>
+
 <body>
-    <div>
-    <h2>Login</h2>
-    <p>You Social Campaigs</p>
-    </div>
-    
+	<div class="container">
+		<h1>Sign Up</h1>
+		<div class="sub">You Social Campaigns</div>
+
+		<label>Email</label>
+		<input type="email" placeholder="Enter your email">
+
+		<label>Password</label>
+		<input type="password" placeholder="Enter password">
+
+		<label>Repeat Password</label>
+		<input type="password" placeholder="Repeat password">
+
+		<div class="term">
+			<input type="checkbox">
+			I accept Term
+		</div>
+
+		<div class="or">OR</div>
+
+		<div class="social-wrap">
+			<button class="btn-social">Google</button>
+			<button class="btn-social">Apple</button>
+		</div>
+
+		<button class="btn-signup">Sign Up</button>
+
+		<div class="bottom">
+			Already have account? <a href="#">Sign In</a>
+		</div>
+	</div>
 </body>
 </html>
