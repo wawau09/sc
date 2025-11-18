@@ -13,11 +13,15 @@ body {
     min-height: 100vh;
 }
 
+.navbar, .container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 10px auto;
+}
+
 .navbar {
-    width: 90%;
     background: white;
     border-radius: 12px;
-    margin: 20px;
     padding: 15px 30px;
     display: flex;
     justify-content: space-between;
@@ -75,66 +79,52 @@ button {
     left: 0;
 }
 
-.menu::before {
-    top: -8px; 
-}
-
-.menu::after {
-    top: 8px; 
-}
+.menu::before { top: -8px; }
+.menu::after { top: 8px; }
 
 .container {
-    width: 100%;
-    max-width: 1200px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 .top-boxes {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
 }
 
-.box {
+.box, .box1 {
     background: white;
     border-radius: 16px;
-    height: 180px;
+    min-height: 180px;
+    padding: 15px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.box1 {
-    background: white;
-    border-radius: 16px;
-    height: 180px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    padding: 20px;
-}
 .bottom {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 15px;
 }
 
 .chart {
-    flex: 1 1 600px;
-    height: 400px;
+    flex: 1 1 60%;
+    min-height: 400px;
 }
 
 .side {
+    flex: 1 1 35%;
     display: flex;
     flex-direction: column;
-    flex: 1 1 250px;
-    gap: 20px;
+    gap: 15px;
 }
 
 .rank {
-    height: 400px;
-    padding: 20px;
+    height: 100%;
+    min-height: 400px;
+    padding: 15px;
 }
-
-/* ================== Profile Card Styles (.box1) ================== */
 
 .profile-card {
     display: flex;
@@ -194,23 +184,14 @@ button {
     text-align: center;
 }
 
-.blue-badge {
-    background: #e6f0ff;
-    color: #4a90ff;
-}
-
-.green-badge {
-    background: #ebfff0;
-    color: #5cb85c;
-}
-
-/* ================== Rank Table Styles (.rank box) ================== */
+.blue-badge { background: #e6f0ff; color: #4a90ff; }
+.green-badge { background: #ebfff0; color: #5cb85c; }
 
 .rank-title {
     font-size: 1.8rem;
     font-weight: 800;
     color: #333;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .rank-table {
@@ -237,18 +218,11 @@ button {
     border-bottom: 1px solid #eee;
 }
 
-.rank-item:last-child {
-    border-bottom: none;
-}
+.rank-item:last-child { border-bottom: none; }
 
-.rank-item > span {
-    text-align: left;
-}
+.rank-item > span { text-align: left; }
 
-.col-point, .rank-point {
-    text-align: right;
-    font-weight: bold;
-}
+.col-point, .rank-point { text-align: right; font-weight: bold; }
 
 .rank-number {
     font-weight: 600;
@@ -266,11 +240,6 @@ button {
     margin: 0 auto;
 }
 
-.rank-percent {
-    color: #999;
-}
+.rank-percent { color: #999; }
 
-.rank-name {
-    font-weight: 600;
-    color: #333;
-}
+.rank-name { font-weight: 600; color: #333; }
