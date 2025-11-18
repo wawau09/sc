@@ -5,7 +5,7 @@ const data_list = [];
 new Chart(ctx, {
     type: 'line',
     data: {
-        labels: ['0.5', '1', '1.5', '2', '2.5', '3'],
+        labels: data_list,
         datasets: [
             {
                 label: 'Revenue',
@@ -71,22 +71,21 @@ new Chart(ctx, {
     }
 });
 
-function GetData() {
-    for(let i = 0; i < 6; i++) {
-        console.log("test");
-    }
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function updateData() {
-    try {
-        const response = await fetch('/data');
-        const data = await response.json();
-        document.getElementById('value').innerText = data.arduino_data + " mA";
-    } catch (error) {
-        document.getElementById('value').innerText = "데이터를 불러오지 못했습니다.";
-    }
+async function GetData() {
+    for(let i = 0; i < 6; i++) {  
+        try {
+            // const response = await fetch('/data');
+            // const data = await response.json();
+            data_list[i] = i;
+            console.log(data_list);
+        } catch (error) {
+            console.log(error);
+        }
 
-    // 1초마다 업데이트
-    setInterval(updateData, 1000);
-    updateData(); // 즉시 1회 실행
+        await sleep(500);
+    }
 }
