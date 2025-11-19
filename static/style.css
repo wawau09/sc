@@ -13,19 +13,21 @@ body {
     min-height: 100vh;
 }
 
+/* 공통 폭 */
 .navbar, .container {
     width: 95%;
     margin: 10px auto;
-    /* max-width: 1200px; 제거 */
 }
 
+/* 메인 컨테이너 구조 */
 .container {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    flex-grow: 1; /* 남은 뷰포트 높이 모두 차지 */
+    flex-grow: 1;
 }
 
+/* ---------------- NAV ---------------- */
 .navbar {
     background: white;
     border-radius: 12px;
@@ -89,9 +91,10 @@ button {
 .menu::before { top: -8px; }
 .menu::after { top: 8px; }
 
+/* ---------------- TOP BOXES ---------------- */
 .top-boxes {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 15px;
 }
 
@@ -103,16 +106,17 @@ button {
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
+/* ---------------- BOTTOM LAYOUT ---------------- */
 .bottom {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    flex-grow: 1; /* 남은 높이 차지 */
+    flex-grow: 1;
 }
 
 .chart {
     flex: 1 1 60%;
-    min-height: 0; /* 높이 유동적으로 허용 */
+    min-height: 300px;
 }
 
 .side {
@@ -120,24 +124,18 @@ button {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    flex-grow: 1; /* .chart와 같은 높이 유지 */
 }
 
 .rank {
     height: 100%;
-    min-height: 0; /* 높이 유동적으로 허용 */
-    flex-grow: 1; /* .side의 높이를 꽉 채움 */
     padding: 15px;
 }
 
+/* ---------------- PROFILE + RANK (유지) ---------------- */
 .profile-card {
     display: flex;
     align-items: center;
     gap: 20px;
-}
-
-.profile-img-container {
-    flex-shrink: 0;
 }
 
 .profile-img {
@@ -145,62 +143,18 @@ button {
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.profile-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
 }
 
 .profile-name {
     font-size: 1.8rem;
     font-weight: 800;
-    color: #333;
 }
-
-.profile-stats-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.profile-stats {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.stat-value {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #ccc; 
-    min-width: 70px;
-}
-
-.badge {
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    text-align: center;
-}
-
-.blue-badge { background: #e6f0ff; color: #4a90ff; }
-.green-badge { background: #ebfff0; color: #5cb85c; }
 
 .rank-title {
     font-size: 1.8rem;
     font-weight: 800;
     color: #333;
     margin-bottom: 20px;
-}
-
-.rank-table {
-    display: flex;
-    flex-direction: column;
 }
 
 .rank-header, .rank-item {
@@ -211,39 +165,63 @@ button {
     align-items: center;
 }
 
-.rank-header {
-    color: #999;
-    font-weight: bold;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 5px;
+/* ---------------- 반응형 ---------------- */
+
+/* 태블릿 이하 */
+@media (max-width: 900px) {
+    .navbar {
+        padding: 12px 20px;
+    }
+
+    .chart {
+        flex: 1 1 100%;
+        min-height: 260px;
+    }
+
+    .side {
+        flex: 1 1 100%;
+    }
+
+    .profile-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .profile-img {
+        width: 100px;
+        height: 100px;
+    }
 }
 
-.rank-item {
-    border-bottom: 1px solid #eee;
+/* 모바일 */
+@media (max-width: 600px) {
+
+    .navbar {
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px;
+    }
+
+    .nav-buttons {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .top-boxes {
+        grid-template-columns: 1fr;
+    }
+
+    .chart {
+        min-height: 220px;
+    }
+
+    .rank-header, .rank-item {
+        grid-template-columns: 35px 60px 1fr 50px;
+        font-size: 0.8rem;
+    }
+
+    .profile-name {
+        font-size: 1.4rem;
+    }
 }
-
-.rank-item:last-child { border-bottom: none; }
-
-.rank-item > span { text-align: left; }
-
-.col-point, .rank-point { text-align: right; font-weight: bold; }
-
-.rank-number {
-    font-weight: 600;
-    text-align: center;
-    color: #555;
-    padding: 5px 0;
-}
-
-.rank-number.highlight {
-    background: #e8ffe8;
-    color: #5cb85c;
-    border-radius: 8px;
-    font-weight: bold;
-    width: 30px;
-    margin: 0 auto;
-}
-
-.rank-percent { color: #999; }
-
-.rank-name { font-weight: 600; color: #333; }
