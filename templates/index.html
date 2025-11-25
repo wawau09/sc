@@ -11,11 +11,18 @@
     <header class="navbar">
     <div class="logo"></div>
     <div class="nav-buttons">
-        <button class="signup" onclick="GetData()">Sign Up</button>
-        <button class="login">Login</button>
-        <div class="menu"></div>
-    </div>
-    </header>
+    {% if session.get('user') %}
+        <button class="profile" onclick="window.location.href='/profile'">Profile</button>
+        <button class="logout" onclick="window.location.href='/logout'">Logout</button>
+    {% else %}
+        <button class="signup" onclick="window.location.href='/signup'">Sign Up</button>
+        <button class="login" onclick="window.location.href='/login'">Login</button>
+    {% endif %}
+</div>
+
+
+</header>
+
 
     <main class="container">
     <section class="top-boxes">

@@ -1,19 +1,120 @@
+/* 1. 기본 설정 및 컨테이너 중앙 정렬 */
 body {
-    background-image: url("로그인 배경이미지.png");
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa; /* 단순한 흰색/회색 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-.login_box {
-    margin-left: 800px;
-    align-content: center;
-    width: 600px;
-    height: 700px;
+/* 2. 로그인 컨테이너 (흰색 카드 디자인 적용) */
+/* 원본 HTML에는 컨테이너 div가 없으므로, body의 자식 요소들을 중앙에 모아 스타일링합니다. */
+/* HTML 구조 변경을 최소화하기 위해 폼과 그 주변 요소를 감싸는 스타일을 body에 flex 속성으로 적용하고, 
+   각 요소를 개별적으로 스타일링하여 '흰색 카드'처럼 보이게 합니다. */
+
+/* **주의: HTML을 변경하지 않으려면, h2, form, a 태그를 감싸는 하나의 div를 추가할 수 없습니다. 
+          따라서 각 요소에 padding, border-radius 등을 적용하여 하나의 카드처럼 보이도록 해야 합니다.**
+          (이 방법은 깔끔한 구현이 어렵습니다. HTML에 <div class="login-container">를 추가하는 것을 강력히 권장합니다.) */
+
+/* 임시적으로 모든 요소를 감싸는 하나의 박스처럼 보이도록 스타일링 */
+.login-box {
     background-color: white;
-    border-radius: 30px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    line-height: normal;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* 이미지와 유사한 그림자 */
+    width: 100%;
+    max-width: 380px; 
+    text-align: center;
+}
+
+/* 3. 제목 스타일 */
+body h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    /* .login-box 안에 있다는 가정 하에 스타일링 */
+    padding-top: 0;
+    margin-top: 0;
+}
+
+/* 4. 폼 및 입력 필드 스타일 */
+form {
+    width: 100%;
+    text-align: left;
+    /* 입력 필드가 폼의 너비를 꽉 채우도록 설정 */
+}
+
+form input[type="text"],
+form input[type="password"] {
+    /* 입력 필드 디자인: 이미지와 같이 둥근 모서리, 얇은 테두리 */
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box; 
+    font-size: 16px;
+    margin-bottom: 20px; 
+    transition: border-color 0.3s;
+}
+
+form input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* 5. Login 버튼 스타일 (파란색) */
+form button[type="submit"] {
+    /* Login 버튼 디자인: 이미지와 같은 파란색, 둥근 모서리, 굵은 글씨 */
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff; 
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* 6. Sign Up 링크 스타일 */
+body > a { 
+    /* 이미지에서 Sign In 링크가 버튼 아래에 있는 것처럼 스타일링 */
+    display: block;
+    font-size: 14px;
+    color: #007bff; 
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 25px; /* 버튼과의 간격 */
+}
+
+/* 7. 이미지에 있는 추가 요소들 (Google 버튼, or 구분선) 스타일 (HTML에 없더라도 디자인 정의) */
+/* 이 요소들은 HTML에 추가되어야만 화면에 나타납니다. */
+
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 14px;
+    color: #999;
+    position: relative;
+}
+
+.google-signup-button {
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
 }
