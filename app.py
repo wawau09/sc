@@ -1,6 +1,4 @@
 from flask import Flask, jsonify, render_template, request, redirect, session
-import sqlite3
-import os
 import random
 from supabase import create_client, Client
 
@@ -12,66 +10,60 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 app = Flask(__name__)
 app.secret_key = "secret123"
 
-DB_NAME = "database.db"
-
-# DB 초기화
-if not os.path.exists(DB_NAME):
-    conn = sqlite3.connect(DB_NAME)
-    cur = conn.cursor()
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS users(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT
-        )
-    """)
-    conn.commit()
-    conn.close()
-
 # 로그인
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username'].strip()
+        email = request.form['username'].strip()   # username → email로 사용
         password = request.form['password'].strip()
-        conn = sqlite3.connect(DB_NAME)
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
-        user = cur.fetchone()
-        conn.close()
-        if user:
-            session['user'] = username
-            return redirect('/')
-        return "아이디나 비밀번호 틀렸다 이기야"
+
+        try:
+            result = supabase.auth.sign_in_with_password({
+                "email": email,
+                "password": password
+            })
+
+            # 로그인 성공
+            if result.user:
+                session['user'] = result.user.email
+                return redirect('/')
+            else:
+                return "로그인 실패했다 이기야. 이메일/비번 확인해라."
+
+        except Exception as e:
+            return "로그인 중 오류났데이: " + str(e)
+
     return render_template('login.html')
 
 # 회원가입
 @app.route('/signup', methods=['GET','POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form['username'].strip()
+        email = request.form['username'].strip()
         password = request.form['password'].strip()
-        conn = sqlite3.connect(DB_NAME)
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE username=?", (username,))
-        if cur.fetchone():
-            return "이미 존재하는 아이디다 이기야"
-        cur.execute("INSERT INTO users(username,password) VALUES(?,?)", (username, password))
-        conn.commit()
-        conn.close()
-        return redirect('/login')
+
+        try:
+            result = supabase.auth.sign_up({
+                "email": email,
+                "password": password
+            })
+            return redirect('/login')
+
+        except Exception as e:
+            return "회원가입 실패했다 이기야: " + str(e)
+
     return render_template('signup.html')
 
 # 로그아웃
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('/')  # 로그아웃 후 index.html로 이동 → 버튼 표시 갱신
+    return redirect('/')
 
 # index.html
 @app.route('/')
 def index():
-    return render_template('index.html')  # 버튼 표시 제어는 index.html에서 session으로
+    return render_template('index.html')
 
 # 프로필 페이지
 @app.route('/profile')
