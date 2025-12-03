@@ -1,6 +1,6 @@
 // ----------------------------
 // 1️⃣ 차트 초기화
-// ----------------------------ymy
+// ----------------------------
 const ctx = document.getElementById('myChart').getContext('2d');
 const data_list = [];
 const labels = ['0.5s', '1.0s', '1.5s', '2.0s', '2.5s', '3.0s'];
