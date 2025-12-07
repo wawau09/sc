@@ -69,37 +69,45 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// function test() {
-//     data_list.push(1.3);
-//     sleep(0.5);
-//     data_list.push(1.3);
-//     sleep(0.5);
-//     data_list.push(1.3);
-//     sleep(0.5);
-//     data_list.push(1.3);
-//     sleep(0.5);
-//     data_list.push(1.3);
-//     sleep(0.5);
-// }
-
-async function GetData() {
-    data_list.length = 0;
-
-    for (let i = 0; i < labels.length; i++) {
-        try {
-            const response = await fetch('/data');
-            const data = await response.json();
-
-            data_list.push(data['arduino_data']);
-
-            // datasets에 새 배열 재할당 후 업데이트
-            reload.data.datasets[0].data = [...data_list];
-            reload.update();
-
-        } catch (error) {
-            console.error("데이터 가져오기 실패:", error);
-        }
-
-        await sleep(500); // 0.5초 간격
-    }
+function test() {
+    data_list.push(1.3);
+    sleep(0.5);
+    reload.update();
+    data_list.push(2.7);
+    sleep(0.5);
+    reload.update();
+    data_list.push(0.0);
+    sleep(0.5);
+    reload.update();
+    data_list.push(5.7);
+    sleep(0.5);
+    reload.update();
+    data_list.push(5.4);
+    sleep(0.5);
+    reload.update();
+    data_list.push(2.9);
+    sleep(0.5);
+    reload.update();
 }
+
+// async function GetData() {
+//     data_list.length = 0;
+
+//     for (let i = 0; i < labels.length; i++) {
+//         try {
+//             const response = await fetch('/data');
+//             const data = await response.json();
+
+//             data_list.push(data['arduino_data']);
+
+//             // datasets에 새 배열 재할당 후 업데이트
+//             reload.data.datasets[0].data = [...data_list];
+//             reload.update();
+
+//         } catch (error) {
+//             console.error("데이터 가져오기 실패:", error);
+//         }
+
+//         await sleep(500); // 0.5초 간격
+//     }
+// }

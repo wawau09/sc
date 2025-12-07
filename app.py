@@ -72,11 +72,11 @@ def profile():
         return redirect('/login')
     return f"프로필 페이지: {session['user']} 이기야"
 
-# /data 라우트 (테스트용 랜덤 데이터)
-@app.route('/data')
-def get_data():
-    line = random.randint(0, 1023)
-    return jsonify({"arduino_data": line})
+# # /data 라우트 (테스트용 랜덤 데이터)
+# @app.route('/data')
+# def get_data():
+#     line = random.randint(0, 1023)
+#     return jsonify({"arduino_data": line})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)
