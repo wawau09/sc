@@ -9,6 +9,9 @@
     <div class="signup-box">
         <h2>Sign Up</h2><br>
         <p>You Social Campaigs</p>
+        {% if error_message %}
+            <div class="error-message">{{ error_message }}</div>
+        {% endif %}
         <form method="POST">
             <input type="text" name="username" placeholder="Username" required><br>
             <input type="password" name="password" placeholder="Password" required><br>

@@ -104,6 +104,7 @@ function test() {
 //             reload.data.datasets[0].data = [...data_list];
 //             reload.update();
 
+<<<<<<< HEAD
 //         } catch (error) {
 //             console.error("데이터 가져오기 실패:", error);
 //         }
@@ -111,3 +112,112 @@ function test() {
 //         await sleep(500); // 0.5초 간격
 //     }
 // }
+=======
+        await sleep(500); // 0.5초 간격
+    }
+}
+
+const rankList = document.getElementById('rankList');
+const rankStatus = document.getElementById('rankStatus');
+const rankUpdateBtn = document.getElementById('rankUpdateBtn');
+const currentUser = document.body.dataset.user;
+let lastAutoUpdate = 0;
+let lastScoreSent = null;
+
+function renderRankings(items) {
+    rankList.innerHTML = '';
+    if (!items.length) {
+        rankList.innerHTML = '<li class="rank-item">기록이 아직 없어요</li>';
+        return;
+    }
+    items.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.className = 'rank-item';
+        const name = item.display_name || `사용자 ${index + 1}`;
+        li.innerHTML = `<span>${index + 1}. ${name}</span><span>${item.score.toFixed(1)}</span>`;
+        rankList.appendChild(li);
+    });
+}
+
+async function loadRankings() {
+    try {
+        const response = await fetch('/rankings');
+        const data = await response.json();
+        renderRankings(data.rankings || []);
+    } catch (error) {
+        console.error("랭킹 불러오기 실패:", error);
+    }
+}
+
+function getScoreSnapshot() {
+    if (!data_list.length) {
+        return null;
+    }
+    const recent = data_list.slice(-5);
+    const sum = recent.reduce((acc, value) => acc + value, 0);
+    return sum / recent.length;
+}
+
+async function updateMyRanking(options = {}) {
+    const silent = Boolean(options.silent);
+    const score = getScoreSnapshot();
+    if (score === null) {
+        if (!silent) {
+            rankStatus.textContent = '데이터가 쌓이면 기록을 업데이트할 수 있어요';
+        }
+        return;
+    }
+    try {
+        const response = await fetch('/rankings/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ score })
+        });
+        if (!response.ok) {
+            throw new Error('update failed');
+        }
+        if (!silent) {
+            rankStatus.textContent = '기록 업데이트 완료!';
+        }
+        await loadRankings();
+    } catch (error) {
+        console.error("랭킹 업데이트 실패:", error);
+        if (!silent) {
+            rankStatus.textContent = '업데이트 실패. 다시 시도해줘요';
+        }
+    }
+}
+
+if (currentUser) {
+    rankStatus.textContent = '최근 5개 평균값으로 내 기록을 업데이트합니다';
+    rankUpdateBtn.disabled = false;
+    rankUpdateBtn.addEventListener('click', () => updateMyRanking());
+} else {
+    rankUpdateBtn.disabled = true;
+}
+
+loadRankings();
+setInterval(loadRankings, 10000);
+
+function maybeAutoUpdate() {
+    if (!currentUser) {
+        return;
+    }
+    const score = getScoreSnapshot();
+    if (score === null) {
+        return;
+    }
+    const now = Date.now();
+    if (now - lastAutoUpdate < 15000) {
+        return;
+    }
+    if (lastScoreSent !== null && Math.abs(score - lastScoreSent) < 0.1) {
+        return;
+    }
+    lastAutoUpdate = now;
+    lastScoreSent = score;
+    updateMyRanking({ silent: true });
+}
+
+setInterval(maybeAutoUpdate, 5000);
+>>>>>>> 1d680c4 (변경)

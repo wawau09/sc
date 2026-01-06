@@ -1,7 +1,7 @@
 /* 1. 기본 설정 및 중앙 정렬 */ 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Helvetica Neue", sans-serif;
     /* 배경은 단순하게 유지 */
     background-color: #f4f7fa; 
     
@@ -31,6 +31,15 @@ body {
     color: #333;
     margin-bottom: 25px; 
     text-align: center;
+}
+.error-message {
+    margin: 10px 0 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #fff1f2;
+    color: #be123c;
+    border: 1px solid #fecdd3;
+    font-size: 0.9rem;
 }
 
 /* 4. 폼 및 입력 필드 스타일 */
@@ -80,9 +89,21 @@ body {
 .signup-box a { 
     display: block; 
     font-size: 14px;
-    color: #007bff; 
+    color: #2563eb; 
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
     margin-top: 25px; 
     text-align: center;
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.3);
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 1px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.signup-box a:hover {
+    color: #1d4ed8;
+    border-color: rgba(29, 78, 216, 0.6);
 }

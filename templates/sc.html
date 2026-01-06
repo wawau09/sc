@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>풍력·수력 발전기 시뮬레이터</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f8ff;
+}
+
+.dashboard {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.card {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.05);
+  padding: 20px;
+  transition: 0.3s;
+}
+.card h2 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+.card.active {
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.5),
+              0 15px 35px rgba(0,0,0,.15);
+  transform: translateY(-4px);
+}
+
+.spin {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  position: relative;
+  animation: spin linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.hub {
+  width: 14px;
+  height: 14px;
+  background: #111;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ================= 풍력 ================= */
+.windScene {
+  height: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.windBlade {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70px;
+  height: 10px;
+  background: #9ca3af;
+  transform-origin: 0% 50%;
+}
+.windBlade:nth-child(1){ transform: rotate(0deg); }
+.windBlade:nth-child(2){ transform: rotate(120deg); }
+.windBlade:nth-child(3){ transform: rotate(240deg); }
+
+.waterScene {
+  height: 240px;
+  position: relative;
+  background: linear-gradient(#dbeafe,#bfdbfe);
+  border-radius: 18px;
+}
+.waterFlow {
+  position: absolute;
+  top: 120px;
+  left: -40%;
+  width: 180%;
+  height: 14px;
+  background: linear-gradient(90deg,transparent,#2563eb,transparent);
+  animation: flow linear infinite;
+}
+@keyframes flow { to { transform: translateX(120px); } }
+
+.waterBlade {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 45px;
+  height: 8px;
+  background: #2563eb;
+  transform-origin: 0% 50%;
+}
+.waterBlade:nth-child(1){ transform: rotate(0deg); }
+.waterBlade:nth-child(2){ transform: rotate(60deg); }
+.waterBlade:nth-child(3){ transform: rotate(120deg); }
+.waterBlade:nth-child(4){ transform: rotate(180deg); }
+.waterBlade:nth-child(5){ transform: rotate(240deg); }
+.waterBlade:nth-child(6){ transform: rotate(300deg); }
+
+.controls {
+  grid-column: 1 / 3;
+}
+.control {
+  margin-bottom: 14px;
+}
+label {
+  font-size: 14px;
+}
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+}
+</style>
+</head>
+
+<body>
+
+<main class="dashboard">
+
+  <div class="card" id="windCard">
+    <h2>🌬️ 풍력 발전기</h2>
+    <div class="windScene">
+      <div class="spin" id="windSpin">
+        <div class="windBlade"></div>
+        <div class="windBlade"></div>
+        <div class="windBlade"></div>
+        <div class="hub"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="waterCard">
+    <h2>💧 수력 발전기</h2>
+    <div class="waterScene">
+      <div class="waterFlow" id="waterFlow"></div>
+      <div class="spin" id="waterSpin">
+        <div class="waterBlade"></div>
+        <div class="waterBlade"></div>
+        <div class="waterBlade"></div>
+        <div class="waterBlade"></div>
+        <div class="waterBlade"></div>
+        <div class="waterBlade"></div>
+        <div class="hub"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card controls">
+    <h2>🌎 환경 변수</h2>
+
+    <div class="control">
+      <label>날씨</label>
+      <select id="weather">
+        <option value="sunny">맑음</option>
+        <option value="cloudy">흐림</option>
+        <option value="rainy">비</option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>바람 속도 (m/s)</label>
+      <input type="range" min="0" max="25" value="8" id="windInput">
+    </div>
+
+    <div class="control">
+      <label>물 유량 (m³/s)</label>
+      <input type="range" min="0" max="40" value="15" id="waterInput">
+    </div>
+  </div>
+
+  <div class="card controls">
+    <h2>⚡ 전기 생산량 (kW)</h2>
+    <canvas id="powerChart"></canvas>
+  </div>
+
+</main>
+
+<script>
+const windInput = document.getElementById("windInput");
+const waterInput = document.getElementById("waterInput");
+const weather = document.getElementById("weather");
+
+const windSpin = document.getElementById("windSpin");
+const waterSpin = document.getElementById("waterSpin");
+const waterFlow = document.getElementById("waterFlow");
+
+const windCard = document.getElementById("windCard");
+const waterCard = document.getElementById("waterCard");
+
+const ctx = document.getElementById("powerChart");
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [
+      {
+        label: '풍력 (kW)',
+        data: [],
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34,197,94,0.15)',
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true
+      },
+      {
+        label: '수력 (kW)',
+        data: [],
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59,130,246,0.15)',
+        tension: 0.4,
+        pointRadius: 0,
+        fill: true
+      }
+    ]
+  },
+  options: {
+    animation: {
+      duration: 600,
+      easing: 'easeOutCubic'
+    },
+    scales: {
+      x: { display: false },
+      y: { beginAtZero: true }
+    }
+  }
+});
+
+// 발전 공식
+function calcWind(v, factor) {
+  return 0.5 * 1.225 * (Math.PI * 4 * 4) * Math.pow(v,3) * 0.4 * factor / 1000;
+}
+function calcWater(q) {
+  return 1000 * 9.81 * q * 10 * 0.8 / 1000;
+}
+
+function update() {
+  const v = Number(windInput.value);
+  const q = Number(waterInput.value);
+
+  windSpin.style.animationDuration = v === 0 ? "999s" : (20 / v) + "s";
+  waterSpin.style.animationDuration = q === 0 ? "999s" : (25 / q) + "s";
+  waterFlow.style.animationDuration = q === 0 ? "999s" : (20 / q) + "s";
+
+  const weatherFactor =
+    weather.value === "sunny" ? 1 :
+    weather.value === "cloudy" ? 0.8 : 0.6;
+
+  const windPower = calcWind(v, weatherFactor);
+  const waterPower = calcWater(q);
+
+  windCard.classList.toggle("active", windPower > waterPower);
+  waterCard.classList.toggle("active", waterPower > windPower);
+
+  chart.data.datasets[0].borderColor =
+    weather.value === "rainy" ? "#16a34a" : "#22c55e";
+
+  chart.data.datasets[1].borderColor =
+    weather.value === "rainy" ? "#1d4ed8" : "#3b82f6";
+
+  chart.data.labels.push("");
+  chart.data.datasets[0].data.push(windPower);
+  chart.data.datasets[1].data.push(waterPower);
+
+  if (chart.data.labels.length > 12) {
+    chart.data.labels.shift();
+    chart.data.datasets[0].data.shift();
+    chart.data.datasets[1].data.shift();
+  }
+
+  chart.update();
+}
+
+setInterval(update, 1000);
+</script>
+
+</body>
+</html>

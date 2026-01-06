@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필</title>
+    <link rel="stylesheet" href="/static/profile.css">
+</head>
+<body>
+    <header class="profile-header">
+        <a class="logo" href="/" aria-label="메인 페이지"></a>
+        <div class="header-actions">
+            <button class="ghost" onclick="location.href='/'">대시보드</button>
+            <button class="solid" onclick="location.href='/logout'">로그아웃</button>
+        </div>
+    </header>
+
+    <main class="profile-container">
+        <section class="card">
+            <h1>프로필 관리</h1>
+            <p class="subtitle">표시되는 아이디를 변경할 수 있어요.</p>
+            {% if message %}
+                <div class="message">{{ message }}</div>
+            {% endif %}
+
+            <div class="info-row">
+                <span class="label">로그인 이메일</span>
+                <span class="value">{{ email }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">최고 에너지 생산량</span>
+                <span class="value">
+                    {% if best_score is not none %}
+                        {{ '%.1f'|format(best_score) }}
+                    {% else %}
+                        기록 없음
+                    {% endif %}
+                </span>
+            </div>
+
+            <form class="profile-form" method="POST" action="/profile">
+                <label for="display_name">아이디</label>
+                <input
+                    id="display_name"
+                    name="display_name"
+                    type="text"
+                    maxlength="20"
+                    value="{{ display_name }}"
+                    required
+                >
+                <button type="submit">아이디 변경</button>
+            </form>
+
+            <div class="divider"></div>
+
+            <form class="profile-form" method="POST" action="/profile/password">
+                <label for="current_password">현재 비밀번호</label>
+                <input
+                    id="current_password"
+                    name="current_password"
+                    type="password"
+                    required
+                >
+
+                <label for="new_password">새 비밀번호</label>
+                <input
+                    id="new_password"
+                    name="new_password"
+                    type="password"
+                    minlength="6"
+                    required
+                >
+
+                <label for="confirm_password">새 비밀번호 확인</label>
+                <input
+                    id="confirm_password"
+                    name="confirm_password"
+                    type="password"
+                    minlength="6"
+                    required
+                >
+
+                <button type="submit">비밀번호 변경</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
